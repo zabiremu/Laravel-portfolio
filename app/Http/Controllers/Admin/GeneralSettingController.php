@@ -71,6 +71,8 @@ class GeneralSettingController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        // dd($request->all());
         $request->validate([
             'logo' => ['required', 'max:5000', 'image'],
             'footer_logo' => ['required', 'max:5000', 'image'],
@@ -82,16 +84,14 @@ class GeneralSettingController extends Controller
         $footer_logo = handleUpload('footer_logo', $setting);
         $favicon = handleUpload('favicon', $setting);
 
-        $generalSetting = new GeneralSetting();
-        $generalSetting->logo = (!empty($logo)) ? $logo : $setting->logo;
-        $generalSetting->footer_logo = (!empty($footer_logo)) ? $footer_logo : $setting->footer_logo;
-        $generalSetting->favicon = (!empty($favicon)) ? $favicon : $setting->favicon;
-        $generalSetting->save();
+        // ✅ Update the existing record instead of creating new one
+        $setting->logo = (!empty($logo)) ? $logo : $setting->logo;
+        $setting->footer_logo = (!empty($footer_logo)) ? $footer_logo : $setting->footer_logo;
+        $setting->favicon = (!empty($favicon)) ? $favicon : $setting->favicon;
+        $setting->save();
 
         toastr('Update Successfully', 'success');
-
         return redirect()->back();
-
     }
 
     /**
